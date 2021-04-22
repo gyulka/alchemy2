@@ -3,6 +3,7 @@ import sqlalchemy
 import sqlalchemy.ext.declarative as dec
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
+import _sha256
 
 SqlAlchemyBase = dec.declarative_base()
 
@@ -37,14 +38,14 @@ class User(SqlAlchemyBase,UserMixin):
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    password = sqlalchemy.Column(sqlalchemy.String)
+    password = sqlalchemy.Column(sqlalchemy.Integer)
 
-    def set_password(self, stroka):
-        self.password = stroka
+    def set_password(self, stroka:str):
+        self.password = stroka.__hash__()
 
 
     def check_password(self,password):
-        return self.password==password
+        return self.password==password.__hash__()
 
 
 class Job(SqlAlchemyBase):

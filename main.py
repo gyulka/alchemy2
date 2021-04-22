@@ -61,7 +61,7 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', jobs_now=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False))
+    return render_template('index.html', jobs_now=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False),jobs_done=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == True))
 
 
 @app.route('/new_job', methods=['POST', 'GET'])
