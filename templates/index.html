@@ -1,0 +1,33 @@
+{% extends "base.html" %} {% block content %}
+работы которые ведутся на данный момент
+{% if current_user.is_authenticated %}
+<div>
+    <a class="btn btn-success" href="/new_job">новая задача</a>
+</div>
+{% endif %}
+
+{% for item in jobs_now%}
+<div>
+<table>
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">team leader</th>            
+            <th scope="col">team</th>            
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.team_leader}}</td>
+            <td>{{item.team}}</td>
+            
+        </tr>
+    </tbody>
+</table>
+</div>
+{{item.description}}
+<br>
+<br>
+
+{% endfor %} {% endblock %}
