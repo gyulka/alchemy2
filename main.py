@@ -71,7 +71,6 @@ def new_job():
     if form.validate_on_submit():
         job = db_unit.Job()
         job.is_finished = form.is_finished.data
-        print(form.description.data)
         job.description = form.description.data
         job.team_leader = form.team_leader.data
         db_sess.add(job)
