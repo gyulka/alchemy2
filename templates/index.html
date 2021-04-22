@@ -29,6 +29,7 @@
 {{item.description}}
 {% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
 <a href="/edit_job?id={{item.id}}" class="btn btn-success"> изменить</a>
+<a href="/delete_job?id={{item.id}}" class="btn btn-success"> удалить</a>
 {% endif %}
 
 <br>
@@ -67,6 +68,7 @@
 {{item.description}}
 {% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
 <a href="/edit_job?id={{item.id}}" class="btn btn-success"> изменить</a>
+<a href="/delete_job?id={{item.id}}" class="btn btn-success"> удалить</a>
 {% endif %}
 
 <br>

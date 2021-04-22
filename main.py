@@ -98,6 +98,13 @@ def edit_job():
     form.team.data = job.team
     return render_template('new_job.html', form=form)
 
+@app.route('/delete_job')
+def delete_job():
+    job = db_sess.query(db_unit.Job).filter(db_unit.Job.id==int(request.args['id'])).first()
+    db_sess.delete(job)
+    db_sess.commit()
+    return redirect('/')
+
 
 if __name__ == '__main__':
     db_unit.global_init("db/blogs.db")
