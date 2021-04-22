@@ -26,10 +26,11 @@
     </tbody>
 </table>
 </div>
-{% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
-<a href="/edit_job" class="btn btn-success"> изменить</a>
-{% endif %}
 {{item.description}}
+{% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
+<a href="/edit_job?id={{item.id}}" class="btn btn-success"> изменить</a>
+{% endif %}
+
 <br>
 <br>
 
@@ -42,9 +43,6 @@
 </h1>
 {% if jobs_now %}
 
-<h1>
-    уже выполнено<br>
-</h1>
 
 {% for item in jobs_done%}
 <div>
@@ -67,6 +65,10 @@
 </table>
 </div>
 {{item.description}}
+{% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
+<a href="/edit_job?id={{item.id}}" class="btn btn-success"> изменить</a>
+{% endif %}
+
 <br>
 <br>
 

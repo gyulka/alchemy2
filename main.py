@@ -1,8 +1,8 @@
 from db import db_unit
 from db.db_unit import User
-from templates.forms.forms import LoginForm, RegisterForm, NewJob
+from templates.forms.forms import LoginForm, RegisterForm, NewJob,EditJob
 from flask import Flask, request, render_template, session, redirect
-from flask_login import LoginManager, login_user, logout_user
+from flask_login import LoginManager, login_user, logout_user,current_user
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
@@ -61,7 +61,6 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
-    print(db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False).all())
     return render_template('index.html', jobs_now=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False).all(),jobs_done=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == True).all())
 
 
@@ -73,6 +72,7 @@ def new_job():
         job.is_finished = form.is_finished.data
         job.description = form.description.data
         job.team_leader = form.team_leader.data
+        job.id_created=current_user.id
         db_sess.add(job)
         db_sess.commit()
 
@@ -80,9 +80,23 @@ def new_job():
 
     return render_template('new_job.html', form=form)
 
-@app.route('/edit_job')
-def edit_jib():
-    return '1'
+@app.route('/edit_job', methods = ['POST','GET'])
+def edit_job():
+    form = EditJob()
+    if form.validate_on_submit():
+        job = db_sess.query(db_unit.Job).filter(db_unit.Job.id ==int(request.args['id'])).first()
+        job.is_finished = form.is_finished.data
+        job.description = form.description.data
+        job.team_leader = form.team_leader.data
+        db_sess.commit()
+
+        return redirect('/')
+
+    job = db_sess.query(db_unit.Job).filter(db_unit.Job.id ==int(request.args['id'])).first()
+    form.description.data=job.description
+    form.team_leader.data = job.team_leader
+    form.team.data = job.team
+    return render_template('new_job.html', form=form)
 
 
 if __name__ == '__main__':

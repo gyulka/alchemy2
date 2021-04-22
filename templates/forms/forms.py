@@ -29,5 +29,6 @@ class NewJob(FlaskForm):
 
     submit = SubmitField('создать')
 
-
+class EditJob(NewJob):
+    submit = SubmitField('изменить')
 
