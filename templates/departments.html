@@ -1,0 +1,43 @@
+{% extends "base.html" %} {% block content %}
+<a class="btn btn-success" href="/">работы</a>
+
+{% if current_user.is_authenticated %}
+<div>
+    <a class="btn btn-success" href="/add_department">новый департамент</a>
+</div>
+{% endif %}
+
+{% for item in departments %}
+<div>
+<table>
+    <thead>
+        <tr>
+            <th scope="col">id</th>
+            <th scope="col">chief</th>            
+            <th scope="col">team</th>        
+            <th scope="col">email</th>        
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>{{item.id}}</td>
+            <td>{{item.chief}}</td>
+            <td>{{item.team}}</td>
+            <td>{{item.email}}</td>
+            
+        </tr>
+    </tbody>
+</table>
+</div>
+{{item.title}}
+{% if current_user.is_authenticated and current_user.id in [1,item.id_created] %}
+<a href="/edit_department?id={{item.id}}" class="btn btn-success"> изменить</a>
+<a href="/delete_department?id={{item.id}}" class="btn btn-success"> удалить</a>
+{% endif %}
+
+<br>
+<br>
+
+{% endfor %}
+
+{% endblock %}

@@ -32,3 +32,13 @@ class NewJob(FlaskForm):
 class EditJob(NewJob):
     submit = SubmitField('изменить')
 
+class NewDep(FlaskForm):
+    email = EmailField('почта')
+    title = StringField('название')
+    chief = IntegerField('id шефа')
+    team = StringField('id членов команды')
+
+    submit = SubmitField('создать')
+
+class EditDep(NewDep):
+    submit = SubmitField('изменить')
