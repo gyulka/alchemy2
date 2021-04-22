@@ -32,7 +32,7 @@ def create_session() -> Session:
     return __factory()
 
 
-class User(SqlAlchemyBase,UserMixin):
+class User(SqlAlchemyBase, UserMixin):
     __tablename__ = 'Users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -40,12 +40,11 @@ class User(SqlAlchemyBase,UserMixin):
     speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     password = sqlalchemy.Column(sqlalchemy.Integer)
 
-    def set_password(self, stroka:str):
+    def set_password(self, stroka: str):
         self.password = stroka.__hash__()
 
-
-    def check_password(self,password):
-        return self.password==password.__hash__()
+    def check_password(self, password):
+        return self.password == password.__hash__()
 
 
 class Job(SqlAlchemyBase):
@@ -58,3 +57,4 @@ class Job(SqlAlchemyBase):
     start_date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
+    id_created = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)

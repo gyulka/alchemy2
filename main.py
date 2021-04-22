@@ -61,7 +61,8 @@ def logout():
 @app.route('/')
 @app.route('/index')
 def index():
-    return render_template('index.html', jobs_now=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False),jobs_done=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == True))
+    print(db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False).all())
+    return render_template('index.html', jobs_now=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == False).all(),jobs_done=db_sess.query(db_unit.Job).filter(db_unit.Job.is_finished == True).all())
 
 
 @app.route('/new_job', methods=['POST', 'GET'])
@@ -79,6 +80,10 @@ def new_job():
         return redirect('/')
 
     return render_template('new_job.html', form=form)
+
+@app.route('/edit_job')
+def edit_jib():
+    return '1'
 
 
 if __name__ == '__main__':

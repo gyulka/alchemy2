@@ -29,3 +29,5 @@ class NewJob(FlaskForm):
 
     submit = SubmitField('создать')
 
+
+
