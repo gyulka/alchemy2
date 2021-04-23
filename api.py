@@ -2,15 +2,20 @@ import sys
 from db import db_unit
 from flask import Flask, Blueprint, jsonify, request
 
-blueprint = Blueprint(
-    'news_api',
+blueprintJobs = Blueprint(
+    'jobs_api',
+    __name__,
+    template_folder='templates'
+)
+blueprintUser = Blueprint(
+    'jobs_api',
     __name__,
     template_folder='templates'
 )
 db_unit.global_init('db/blogs.db')
 
 
-@blueprint.route('/api/jobs', methods=['POST', 'GET', 'DELETE','PUT'])
+@blueprintJobs.route('/api/jobs', methods=['POST', 'GET', 'DELETE', 'PUT'])
 def get_jobs():
     sess = db_unit.create_session()
     if request.method == 'GET':
@@ -60,7 +65,7 @@ def get_jobs():
             return jsonify(respone={'success': False, 'error': error.__str__()})
 
 
-@blueprint.route('/api/jobs/<int:job_id>')
+@blueprintJobs.route('/api/jobs/<int:job_id>')
 def get_job(job_id):
     sess = db_unit.create_session()
     ans = [item.to_dict() for item in sess.query(db_unit.Job).filter(db_unit.Job.id == job_id).all()]
@@ -70,6 +75,87 @@ def get_job(job_id):
     return jsonify({'response': {'success': False, 'error': 'не найдено'}})
 
 
-@blueprint.route('/api/jobs/<job_id>')
+@blueprintJobs.route('/api/jobs/<job_id>')
 def get_job_except(job_id):
     return jsonify({'response': 'неверный id'})
+
+
+
+
+
+
+
+
+
+@blueprintUser.route('/api/users', methods=['POST', 'GET', 'DELETE', 'PUT'])
+def get_users():
+    sess = db_unit.create_session()
+    if request.method == 'GET':
+        return jsonify({'response': [item.to_dict() for item in sess.query(db_unit.User).all()]})
+    elif request.method == 'POST':
+        try:
+            if [i for i in sess.query(db_unit.User).filter(db_unit.User.id == int(request.args['id'])).all()]:
+                return jsonify(success=False, error='already exist')
+            user = db_unit.User()
+            user.id = int(request.args['id'])
+            user.name = request.args['name']
+            user.password = request.args['password'].__hash__()
+            user.speciality = request.args['speciality']
+            # остальное не используется, понадобится, допишу
+            sess.add(user)
+            sess.commit()
+            return jsonify(response={'success': True})
+        except Exception as error:
+            return jsonify(respone={'success': False, 'error': error.__str__()})
+    if request.method =='DELETE':
+        try:
+            id = int(request.args['id'])
+            user = sess.query(db_unit.User).filter(db_unit.User.id == id).first()
+            print(user)
+            sess.delete(user)
+            sess.commit()
+            return jsonify(response={'success': True})
+        except Exception as error:
+            return jsonify(respone={'success': False, 'error': error.__str__()})
+    if request.method =='PUT':
+        try:
+            user = [i for i in sess.query(db_unit.User).filter(db_unit.User.id == int(request.args['id'])).all()][0]
+            user.id = int(request.args['id'])
+            user.name = request.args['name']
+            user.password = request.args['password'].__hash__()
+            user.speciality = request.args['speciality']
+            sess.commit()
+            return jsonify(response={'success': True})
+        except IndexError as error:
+            return jsonify(response = {'success':False,'error':'не существует человека'})
+        except Exception as error:
+            return jsonify(respone={'success': False, 'error': error.__str__()})
+
+
+@blueprintUser.route('/api/user/<int:user_id>')
+def get_user(user_id):
+    sess = db_unit.create_session()
+    ans = [item.to_dict() for item in sess.query(db_unit.User).filter(db_unit.User.id == user_id).all()]
+    if ans:
+        return jsonify(
+            {'response': ans[0]})
+    return jsonify({'response': {'success': False, 'error': 'не найдено'}})
+
+
+@blueprintUser.route('/api/user/<user_id>')
+def get_user_except(user_id):
+    return jsonify({'response': 'неверный id'})
+
+
+
+
+
+
+
+
+
+
+
+
+
+

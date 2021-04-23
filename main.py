@@ -169,5 +169,5 @@ def index_dep():
 if __name__ == '__main__':
     db_unit.global_init("db/blogs.db")
     db_sess = db_unit.create_session()
-    app.register_blueprint(api.blueprint)
+    app.register_blueprint(api.blueprintJobs)
     app.run()
