@@ -40,6 +40,7 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     name = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     speciality = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     password = sqlalchemy.Column(sqlalchemy.Integer)
+    city = sqlalchemy.Column(sqlalchemy.String,nullable=True)
 
     def set_password(self, stroka: str):
         self.password = stroka.__hash__()

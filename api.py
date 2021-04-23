@@ -8,7 +8,7 @@ blueprintJobs = Blueprint(
     template_folder='templates'
 )
 blueprintUser = Blueprint(
-    'jobs_api',
+    'users_api',
     __name__,
     template_folder='templates'
 )
@@ -38,7 +38,7 @@ def get_jobs():
             return jsonify(response={'success': True})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
-    if request.method =='DELETE':
+    if request.method == 'DELETE':
         try:
             id = int(request.args['id'])
             job = sess.query(db_unit.Job).filter(db_unit.Job.id == id).first()
@@ -48,7 +48,7 @@ def get_jobs():
             return jsonify(response={'success': True})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
-    if request.method =='PUT':
+    if request.method == 'PUT':
         try:
             job = [i for i in sess.query(db_unit.Job).filter(db_unit.Job.id == int(request.args['id'])).all()][0]
             job.team_leader = int(request.args['team_leader'])
@@ -60,7 +60,7 @@ def get_jobs():
             sess.commit()
             return jsonify(response={'success': True})
         except IndexError as error:
-            return jsonify(response = {'success':False,'error':'не существует работы'})
+            return jsonify(response={'success': False, 'error': 'не существует работы'})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
 
@@ -80,13 +80,6 @@ def get_job_except(job_id):
     return jsonify({'response': 'неверный id'})
 
 
-
-
-
-
-
-
-
 @blueprintUser.route('/api/users', methods=['POST', 'GET', 'DELETE', 'PUT'])
 def get_users():
     sess = db_unit.create_session()
@@ -101,13 +94,14 @@ def get_users():
             user.name = request.args['name']
             user.password = request.args['password'].__hash__()
             user.speciality = request.args['speciality']
+            user.city = request.args['city']
             # остальное не используется, понадобится, допишу
             sess.add(user)
             sess.commit()
             return jsonify(response={'success': True})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
-    if request.method =='DELETE':
+    if request.method == 'DELETE':
         try:
             id = int(request.args['id'])
             user = sess.query(db_unit.User).filter(db_unit.User.id == id).first()
@@ -117,7 +111,7 @@ def get_users():
             return jsonify(response={'success': True})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
-    if request.method =='PUT':
+    if request.method == 'PUT':
         try:
             user = [i for i in sess.query(db_unit.User).filter(db_unit.User.id == int(request.args['id'])).all()][0]
             user.id = int(request.args['id'])
@@ -127,7 +121,7 @@ def get_users():
             sess.commit()
             return jsonify(response={'success': True})
         except IndexError as error:
-            return jsonify(response = {'success':False,'error':'не существует человека'})
+            return jsonify(response={'success': False, 'error': 'не существует человека'})
         except Exception as error:
             return jsonify(respone={'success': False, 'error': error.__str__()})
 
@@ -135,27 +129,14 @@ def get_users():
 @blueprintUser.route('/api/user/<int:user_id>')
 def get_user(user_id):
     sess = db_unit.create_session()
-    ans = [item.to_dict() for item in sess.query(db_unit.User).filter(db_unit.User.id == user_id).all()]
+    ans = [item.to_dict() for item in sess.query(db_unit.User).filter(db_unit.User.id == int(user_id)).all()]
+    print(ans)
     if ans:
         return jsonify(
-            {'response': ans[0]})
+            {'response': {'response': ans[0], 'success': True}})
     return jsonify({'response': {'success': False, 'error': 'не найдено'}})
 
 
 @blueprintUser.route('/api/user/<user_id>')
 def get_user_except(user_id):
     return jsonify({'response': 'неверный id'})
-
-
-
-
-
-
-
-
-
-
-
-
-
-

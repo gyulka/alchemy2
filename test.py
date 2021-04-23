@@ -74,6 +74,13 @@ def test4():
         requests.get('http://127.0.0.1:5000/api/jobs/10').json())
 
 
+def add_user():
+    print(requests.post('http://127.0.0.1:5000/api/users', params={
+        'id': 10,
+        'name':'roma',
+        'speciality':'none',
+        'password':'password',
+        'city':'55.449,56.001'
 
-
-test4()
+    }).json())
+add_user()

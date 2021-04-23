@@ -1,8 +1,9 @@
+import requests
 import api
 from db import db_unit
 from db.db_unit import User
 from templates.forms.forms import LoginForm, RegisterForm, NewJob, EditJob, NewDep, EditDep
-from flask import Flask, request, render_template, session, redirect,Blueprint
+from flask import Flask, request, render_template, session, redirect, Blueprint , jsonify
 from flask_login import LoginManager, login_user, logout_user, current_user
 
 app = Flask(__name__)
@@ -166,8 +167,21 @@ def index_dep():
     return render_template('departments.html', departments=db_sess.query(db_unit.Department).all())
 
 
+@app.route('/users_show/<int:user_id>')
+def index_users(user_id):
+    city = requests.get(f'http://127.0.0.1:5000/api/user/{user_id}').json()
+    if city['response']['success']:
+        return render_template('city_form.html',
+                               img=f"https://static-maps.yandex.ru/1.x/?l=sat,skl&spn=0.01,0.01&ll={city['response']['response']['city']}")
+    else:
+        return jsonify(response = {
+            'success':False
+        })
+
+
 if __name__ == '__main__':
     db_unit.global_init("db/blogs.db")
     db_sess = db_unit.create_session()
     app.register_blueprint(api.blueprintJobs)
+    app.register_blueprint(api.blueprintUser)
     app.run()
