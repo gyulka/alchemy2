@@ -1,7 +1,8 @@
+import api
 from db import db_unit
 from db.db_unit import User
 from templates.forms.forms import LoginForm, RegisterForm, NewJob, EditJob, NewDep, EditDep
-from flask import Flask, request, render_template, session, redirect
+from flask import Flask, request, render_template, session, redirect,Blueprint
 from flask_login import LoginManager, login_user, logout_user, current_user
 
 app = Flask(__name__)
@@ -168,4 +169,5 @@ def index_dep():
 if __name__ == '__main__':
     db_unit.global_init("db/blogs.db")
     db_sess = db_unit.create_session()
+    app.register_blueprint(api.blueprint)
     app.run()

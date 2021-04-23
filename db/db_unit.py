@@ -4,6 +4,7 @@ import sqlalchemy.ext.declarative as dec
 import sqlalchemy.orm as orm
 from sqlalchemy.orm import Session
 import _sha256
+from sqlalchemy_serializer import SerializerMixin
 
 SqlAlchemyBase = dec.declarative_base()
 
@@ -32,7 +33,7 @@ def create_session() -> Session:
     return __factory()
 
 
-class User(SqlAlchemyBase, UserMixin):
+class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     __tablename__ = 'Users'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -47,7 +48,7 @@ class User(SqlAlchemyBase, UserMixin):
         return self.password == password.__hash__()
 
 
-class Job(SqlAlchemyBase):
+class Job(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Jobs'
 
     id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
@@ -61,7 +62,7 @@ class Job(SqlAlchemyBase):
     hazard = sqlalchemy.Column(sqlalchemy.Integer)
 
 
-class Department(SqlAlchemyBase):
+class Department(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Department'
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
@@ -72,8 +73,8 @@ class Department(SqlAlchemyBase):
     email = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
 
-class Hazard(SqlAlchemyBase):
+class Hazard(SqlAlchemyBase, SerializerMixin):
     __tablename__ = 'Hazards'
 
-    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True,autoincrement=True)
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True, autoincrement=True)
     title = sqlalchemy.Column(sqlalchemy.String, nullable=True)
