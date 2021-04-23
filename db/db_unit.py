@@ -58,6 +58,7 @@ class Job(SqlAlchemyBase):
     end_date = sqlalchemy.Column(sqlalchemy.DateTime, nullable=True)
     is_finished = sqlalchemy.Column(sqlalchemy.Boolean, nullable=False)
     id_created = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
+    hazard = sqlalchemy.Column(sqlalchemy.Integer)
 
 
 class Department(SqlAlchemyBase):
@@ -69,3 +70,10 @@ class Department(SqlAlchemyBase):
     chief = sqlalchemy.Column(sqlalchemy.Integer, nullable=False)
     members = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+
+
+class Hazard(SqlAlchemyBase):
+    __tablename__ = 'Hazards'
+
+    id = sqlalchemy.Column(sqlalchemy.Integer, primary_key=True,autoincrement=True)
+    title = sqlalchemy.Column(sqlalchemy.String, nullable=True)

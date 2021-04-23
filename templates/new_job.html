@@ -18,6 +18,15 @@
         {% endfor %}
     </p>
     <p>
+        {{ form.hazard.label }}<br>
+        {{ form.hazard(class="form-control") }}<br>
+        {% for error in form.hazard.errors %}
+            <div class="alert alert-danger" role="alert">
+                {{ error }}
+            </div>
+        {% endfor %}
+    </p>
+    <p>
         {{ form.team_leader.label }}<br>
         {{ form.team_leader(class="form-control") }}<br>
         {% for error in form.team_leader.errors %}

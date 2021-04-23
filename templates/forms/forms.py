@@ -23,9 +23,12 @@ class LoginForm(FlaskForm):
 class NewJob(FlaskForm):
     description = TextAreaField('описание', validators=[DataRequired()])
     team_leader = IntegerField('team_leader id')
+    hazard = IntegerField('hazard id')
+
     team = StringField('id участников команды')
     startdate= DateField('Дата начала')
     is_finished = BooleanField('работа закончена?')
+
 
     submit = SubmitField('создать')
 
