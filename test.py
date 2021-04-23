@@ -52,6 +52,13 @@ def test2():
     print(
         requests.get('http://127.0.0.1:5000/api/jobs/10').json())
 
+def test3():
+    test2()
+    print(requests.delete('http://127.0.0.1:5000/api/jobs',params = {'id':10}).json())
+    print(
+        requests.get('http://127.0.0.1:5000/api/jobs/10').json()) # должна быть ощибка так как такой строки в бд нет
 
 
-test2()
+
+
+test3()
