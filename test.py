@@ -107,4 +107,25 @@ def test_resources_user():  # с пустой базой id будет 0 пос�
         requests.get('http://127.0.0.1:5000/api/v2/users').json())
 
 
-test_resources_user()
+def test_job_resource():
+    try:  # чтобы не заканчивалось при пустой базе. там будет ответ 404
+        pprint(requests.get('http://127.0.0.1:5000/api/v2/jobs').json())
+    except Exception:
+        pass
+    pprint(requests.post('http://127.0.0.1:5000/api/v2/jobs', params={
+        'team_leader': 1,
+        'hazard': 1,
+        'description': 'desc',
+        'team': '1,2,3',
+        'is_finished': True,
+        'id_created': 1
+    }).json())
+    pprint(requests.get('http://127.0.0.1:5000/api/v2/jobs/1').json())
+    pprint(requests.delete('http://127.0.0.1:5000/api/v2/jobs/1').json())
+    try:  # чтобы не заканчивалось при пустой базе. там будет ответ 404
+        pprint(requests.get('http://127.0.0.1:5000/api/v2/jobs').json())
+    except Exception:
+        pass
+
+
+test_job_resource()

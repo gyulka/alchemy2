@@ -188,4 +188,5 @@ if __name__ == '__main__':
     app.register_blueprint(api_1.blueprintJobs)
     app.register_blueprint(api_1.blueprintUser)
     app.register_blueprint(api_1.blueprintUserv2)
+    app.register_blueprint(api_1.blueprintJobsv2)
     app.run()

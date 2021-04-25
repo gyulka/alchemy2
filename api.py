@@ -19,6 +19,13 @@ blueprintUserv2 = Blueprint(
 )
 db_unit.global_init('db/blogs.db')
 
+blueprintJobsv2 = Blueprint(
+    'jobsv2_api',
+    __name__,
+    template_folder='templates'
+)
+db_unit.global_init('db/blogs.db')
+
 
 @blueprintJobs.route('/api/jobs', methods=['POST', 'GET', 'DELETE', 'PUT'])
 def get_jobs():
@@ -158,6 +165,30 @@ def get_user_v2(user_id):
         return user.UserResource().get(user_id)
     else:
         return user.UserResource().delete(user_id)
+
+
+from resources import job
+
+
+
+@blueprintJobsv2.route('/api/v2/jobs', methods=['GET', 'POST'])
+def get_users_v2():
+    if request.method == 'GET':
+        return job.JobListResource().get()
+    return job.JobListResource().post()
+
+
+@blueprintJobsv2.route('/api/v2/jobs/<int:job_id>', methods=['GET', 'DELETE'])
+def get_user_v2(job_id):
+    if request.method == 'GET':
+        return job.JobResource().get(job_id)
+    else:
+        return job.JobResource().delete(job_id)
+
+
+
+
+
 
 
 @blueprintUser.route('/api/user/<user_id>')
