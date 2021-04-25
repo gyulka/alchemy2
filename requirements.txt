@@ -4,3 +4,4 @@ flask-wtf
 flask-login
 SQLAlchemy-serializer
 requests
+flask-restful

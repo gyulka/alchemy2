@@ -1,15 +1,17 @@
 import requests
-import api
+import api as api_1
 from db import db_unit
 from db.db_unit import User
 from templates.forms.forms import LoginForm, RegisterForm, NewJob, EditJob, NewDep, EditDep
-from flask import Flask, request, render_template, session, redirect, Blueprint , jsonify
+from flask import Flask, request, render_template, session, redirect, Blueprint, jsonify
 from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_restful import reqparse, abort, Api, Resource
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
 login_manager = LoginManager()
 login_manager.init_app(app)
+api = Api(app)
 
 
 @login_manager.user_loader
@@ -174,14 +176,16 @@ def index_users(user_id):
         return render_template('city_form.html',
                                img=f"https://static-maps.yandex.ru/1.x/?l=sat,skl&spn=0.01,0.01&ll={city['response']['response']['city']}")
     else:
-        return jsonify(response = {
-            'success':False
+        return jsonify(response={
+            'success': False
         })
+
 
 
 if __name__ == '__main__':
     db_unit.global_init("db/blogs.db")
     db_sess = db_unit.create_session()
-    app.register_blueprint(api.blueprintJobs)
-    app.register_blueprint(api.blueprintUser)
+    app.register_blueprint(api_1.blueprintJobs)
+    app.register_blueprint(api_1.blueprintUser)
+    app.register_blueprint(api_1.blueprintUserv2)
     app.run()

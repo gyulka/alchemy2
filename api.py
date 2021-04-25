@@ -12,6 +12,11 @@ blueprintUser = Blueprint(
     __name__,
     template_folder='templates'
 )
+blueprintUserv2 = Blueprint(
+    'userv2_api',
+    __name__,
+    template_folder='templates'
+)
 db_unit.global_init('db/blogs.db')
 
 
@@ -135,6 +140,24 @@ def get_user(user_id):
         return jsonify(
             {'response': {'response': ans[0], 'success': True}})
     return jsonify({'response': {'success': False, 'error': 'не найдено'}})
+
+
+from resources import user
+
+
+@blueprintUserv2.route('/api/v2/users', methods=['GET', 'POST'])
+def get_users_v2():
+    if request.method == 'GET':
+        return user.UserListResource().get()
+    return user.UserListResource().post()
+
+
+@blueprintUserv2.route('/api/v2/users/<int:user_id>', methods=['GET', 'DELETE'])
+def get_user_v2(user_id):
+    if request.method == 'GET':
+        return user.UserResource().get(user_id)
+    else:
+        return user.UserResource().delete(user_id)
 
 
 @blueprintUser.route('/api/user/<user_id>')
