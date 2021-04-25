@@ -36,18 +36,22 @@ class UserListResource(Resource):
     def get(self):
         session = db_unit.create_session()
         users = session.query(db_unit.User).all()
-        return jsonify({'news': [user.to_dict(
+        return jsonify({'users': [user.to_dict(
         ) for user in users]})
 
     def post(self):
-        args = parser.parse_args()
-        session = db_unit.create_session()
-        user = db_unit.User(
-            name=args['name'],
-            speciality=args['speciality'],
-            city=args['city']
-        )
-        user.set_password(args['password'])
-        session.add(user)
-        session.commit()
-        return jsonify({'success': 'OK'})
+        try:
+            args = parser.parse_args()
+            session = db_unit.create_session()
+            user = db_unit.User(
+                name=args['name'],
+                speciality=args['speciality'],
+                city=args['city']
+            )
+            user.set_password(args['password'])
+            user.id = args['id']
+            session.add(user)
+            session.commit()
+            return jsonify({'success': 'OK'})
+        except Exception as error:
+            return jsonify(error=error.__str__())

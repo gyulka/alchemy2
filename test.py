@@ -1,3 +1,4 @@
+from pprint import pprint
 import requests
 
 
@@ -38,7 +39,7 @@ def test2():
         'description': '''desc''',
         'team': '1, 2, 3',
         'is_finished': True,
-        'id_created':1
+        'id_created': 1
     }).json())
     print(requests.post('http://127.0.0.1:5000/api/jobs', params={
         'id': 11,
@@ -52,11 +53,12 @@ def test2():
     print(
         requests.get('http://127.0.0.1:5000/api/jobs/10').json())
 
+
 def test3():
     test2()
-    print(requests.delete('http://127.0.0.1:5000/api/jobs',params = {'id':10}).json())
+    print(requests.delete('http://127.0.0.1:5000/api/jobs', params={'id': 10}).json())
     print(
-        requests.get('http://127.0.0.1:5000/api/jobs/10').json()) # должна быть ощибка так как такой строки в бд нет
+        requests.get('http://127.0.0.1:5000/api/jobs/10').json())  # должна быть ощибка так как такой строки в бд нет
 
 
 def test4():
@@ -74,13 +76,35 @@ def test4():
         requests.get('http://127.0.0.1:5000/api/jobs/10').json())
 
 
-def add_user():
-    print(requests.post('http://127.0.0.1:5000/api/users', params={
+def add_user(api=''):
+    print(requests.post(f'http://127.0.0.1:5000/api/{api}users', params={
         'id': 10,
-        'name':'roma',
-        'speciality':'none',
-        'password':'password',
-        'city':'55.449,56.001'
+        'name': 'roma',
+        'speciality': 'none',
+        'password': 'password',
+        'city': '55.449,56.001'
 
     }).json())
-add_user()
+
+
+# add_user()
+
+def test_resources_user():  # с пустой базой id будет 0 поставить id=0 нельзя
+    try:
+        pprint(
+            requests.get('http://127.0.0.1:5000/api/v2/users').json())
+    except Exception:
+        pass
+    add_user('v2/')  # на нём проверка будет идти
+    pprint(
+        requests.get('http://127.0.0.1:5000/api/v2/users').json())
+    x = requests.get('http://127.0.0.1:5000/api/v2/users/1')
+    print(x)
+    pprint(
+        x.json())  # конкретный пользователь
+    pprint(requests.delete('http://127.0.0.1:5000/api/v2/users/1').json())
+    pprint(
+        requests.get('http://127.0.0.1:5000/api/v2/users').json())
+
+
+test_resources_user()
